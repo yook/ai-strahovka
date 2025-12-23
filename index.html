@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Страхование</title>
+    <title>Страховой бот — Сравни</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -12,46 +12,33 @@
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            box-sizing: border-box
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0f1729;
-            color: #ffffff;
-            padding: 0;
-            overflow-x: hidden;
+            color: #fff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Theme variables (custom) */
-
-        #app {
-            min-height: 100vh;
-            padding-bottom: 20px;
-        }
-
-        /* Responsive centered page container
-           - Desktop: fixed max width and centered
-           - Mobile: full width with side paddings */
+        .container,
         .page {
             max-width: 980px;
             margin: 0 auto;
-            padding: 0 20px;
-            width: 100%;
+            padding: 20px
         }
 
         .header {
-            /* background: #0a0e1a; */
             padding: 24px 20px;
-            color: white;
-            text-align: center;
-            /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); */
+            text-align: center
         }
 
         .header h1 {
             font-size: 24px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 8px
         }
 
         .header h1 i {
@@ -61,21 +48,11 @@
         }
 
         .header p {
-            opacity: 0.9;
+            opacity: 0.9
         }
 
         .products-section {
-            padding: 8px 20px;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--tg-theme-text-color, #000);
-            margin: 20px 0 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            opacity: 0.7;
+            padding: 8px 0
         }
 
         .product-item {
@@ -93,12 +70,12 @@
 
         .product-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            background: #202d42;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+            background: #202d42
         }
 
         .product-item:active {
-            transform: scale(0.98);
+            transform: scale(.99)
         }
 
         .product-icon {
@@ -109,205 +86,113 @@
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            flex-shrink: 0;
+            flex-shrink: 0
         }
 
         .product-icon i {
-            color: white;
-        }
-
-        .product-info {
-            flex: 1;
+            color: #fff
         }
 
         .product-name {
             font-size: 16px;
             font-weight: 600;
-            margin-bottom: 4px;
-            color: #ffffff;
+            color: #fff
         }
 
         .product-desc {
             font-size: 13px;
-            color: #999999;
-            line-height: 1.4;
-        }
-
-        .product-arrow {
-            color: #666666;
-            font-size: 20px;
+            color: #99a0b3
         }
 
         .form-screen {
             padding: 20px;
-            animation: slideIn 0.3s ease;
+            animation: slideIn .25s ease
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateX(20px);
+                transform: translateX(10px)
             }
 
             to {
                 opacity: 1;
-                transform: translateX(0);
+                transform: none
             }
         }
 
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #667eea;
-            font-size: 16px;
-            margin-bottom: 20px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            padding: 8px 0;
-        }
-
-        .form-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 24px;
-            color: #ffffff;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #ffffff;
-        }
-
         .form-input,
-        .form-select {
+        .form-select,
+        select {
             width: 100%;
             padding: 14px;
-            border: 2px solid #1a2332;
             border-radius: 12px;
-            font-size: 15px;
+            border: 2px solid #1a2332;
             background: #1a2332;
-            color: #ffffff;
-            outline: none;
-            transition: border-color 0.3s;
+            color: #fff;
+            font-size: 15px
         }
 
         .form-input:focus,
         .form-select:focus {
             border-color: #667eea;
+            outline: none
         }
 
         .submit-button {
             width: 100%;
             padding: 16px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            color: #fff;
             border: none;
             border-radius: 12px;
-            font-size: 16px;
             font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-            margin-top: 10px;
-        }
-
-        .submit-button:active {
-            transform: scale(0.98);
+            cursor: pointer
         }
 
         .success-screen {
             padding: 40px 20px;
-            text-align: center;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+            text-align: center
         }
 
         .success-icon {
-            font-size: 80px;
-            margin-bottom: 24px;
-        }
-
-        .success-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #ffffff;
-        }
-
-        .success-text {
-            font-size: 15px;
-            color: #999999;
-            line-height: 1.6;
-            margin-bottom: 32px;
+            font-size: 64px;
+            margin-bottom: 20px
         }
 
         .promo {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
             border-radius: 20px;
             padding: 30px;
             text-align: center;
-            margin-bottom: 40px;
-            backdrop-filter: blur(10px);
-        }
-
-        .promo h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            margin: 20px 0
         }
 
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            padding: 24px;
             text-align: center;
-            backdrop-filter: blur(10px);
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
+            backdrop-filter: blur(8px);
+            cursor: pointer
         }
 
         .feature-icon {
             font-size: 48px;
-            margin-bottom: 20px;
-            color: #43e97b;
+            margin-bottom: 12px;
+            color: #43e97b
         }
 
         .feature-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .feature-desc {
-            opacity: 0.9;
-            line-height: 1.6;
+            font-size: 18px;
+            font-weight: 600
         }
 
         .license-plate {
@@ -315,241 +200,160 @@
             gap: 10px;
             align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
+            flex-wrap: wrap
         }
 
-        .plate-input {
-            background: #ffffff;
-            border: none;
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 18px;
-            font-weight: 600;
-            text-align: center;
-            color: #000;
-            width: 80px;
-        }
-
+        input.plate,
         .plate-region {
-            background: #ffffff;
+            background: #fff;
             border: none;
             border-radius: 8px;
-            padding: 15px;
+            padding: 12px;
             font-size: 18px;
             font-weight: 600;
             text-align: center;
-            color: #000;
-            width: 60px;
+            color: #000
         }
 
-        .submit-btn {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 16px 32px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .app-section {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .qr-code {
+        .qr {
             width: 150px;
             height: 150px;
-            background: #ffffff;
+            background: #fff;
             border-radius: 12px;
-            margin: 20px auto;
+            margin: 18px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            color: #000;
+            color: #000
         }
 
-        .faq {
-            margin-top: 40px;
-            text-align: center;
-        }
-
-        .faq h3 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .container {
-            max-width: 980px;
-            margin: 0 auto;
-        }
-
-        .form-section {
-            background: #1a2332;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-        }
-
-        @media (max-width: 768px) {
+        @media (max-width:768px) {
             .header h1 {
-                font-size: 28px;
+                font-size: 20px
             }
 
-            .license-plate {
-                flex-wrap: wrap;
-            }
-
-            .plate-input {
-                width: 60px;
+            .features {
+                grid-template-columns: 1fr
             }
         }
+    </style>
 </head>
 
 <body>
-    <div id="app" class="container">
-        <div class="header">
-            <h1>ОСАГО</h1>
-            <p>Сравните предложения 18 ведущих страховых компаний, мгновенно рассчитайте стоимость ОСАГО с помощью умного калькулятора и оформите электронный полис онлайн.</p>
-        </div>
+    <div id="app">
+        <div class="page">
+            <div v-if="currentScreen === 'home'">
+                <div class="header">
+                    <h1><i class="fas fa-car"></i> <i class="fas fa-home"></i> <i class="fas fa-plane"></i><br>Страховой
+                        ии-агент</h1>
+                    <p>Сравнение цен. Онлайн-оформление.</p>
+                </div>
 
-        <div class="promo">
-            <h2>Выиграйте автомобиль или 500 000 ₽ за ОСАГО</h2>
-        </div>
-
-        <div class="features">
-            <div class="feature-card" onclick="window.location.href='osago.html'">
-                <div class="feature-icon"><i class="fas fa-car"></i></div>
-                <div class="feature-title">ОСАГО</div>
-                <div class="feature-desc">Обязательное страхование автогражданской ответственности</div>
-            </div>
-
-            <div class="feature-card" onclick="window.location.href='kasko.html'">
-                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                <div class="feature-title">Каско</div>
-                <div class="feature-desc">Защита автомобиля от любых повреждений</div>
-            </div>
-
-            <div class="feature-card" onclick="window.location.href='ipoteka.html'">
-                <div class="feature-icon"><i class="fas fa-home"></i></div>
-                <div class="feature-title">Ипотечное страхование</div>
-                <div class="feature-desc">Страхование недвижимости по ипотеке</div>
-            </div>
-
-            <div class="feature-card" onclick="window.location.href='apartment.html'">
-                <div class="feature-icon"><i class="fas fa-building"></i></div>
-                <div class="feature-title">Страхование квартиры</div>
-                <div class="feature-desc">Комплексная защита вашего жилья</div>
-            </div>
-
-            <div class="feature-card" onclick="window.location.href='travel.html'">
-                <div class="feature-icon"><i class="fas fa-plane"></i></div>
-                <div class="feature-title">Путешествие</div>
-                <div class="feature-desc">Медицинская помощь и страховка за границей</div>
-            </div>
-
-            <div class="feature-card" onclick="window.location.href='health.html'">
-                <div class="feature-icon"><i class="fas fa-heart"></i></div>
-                <div class="feature-title">Жизнь и здоровье</div>
-                <div class="feature-desc">Финансовая защита вас и ваших близких</div>
-            </div>
-        </div>
-
-        <div class="form-section">
-            <div class="form-group">
-                <label class="form-label">Введите госномер автомобиля</label>
-                <div class="license-plate">
-                    <input type="text" class="plate-input" placeholder="A" maxlength="1" v-model="plate.letter1">
-                    <input type="text" class="plate-input" placeholder="000" maxlength="3" v-model="plate.number">
-                    <input type="text" class="plate-input" placeholder="AA" maxlength="2" v-model="plate.letter2">
-                    <input type="text" class="plate-region" placeholder="00" maxlength="2" v-model="plate.region">
-                    <span style="color: white; font-weight: 600;">RUS</span>
+                <div class="products-section">
+                    <div v-for="product in products" :key="product.id" class="product-item" @click="goTo(product)">
+                        <div class="product-icon" :style="{background: product.color}">
+                            <i :class="product.icon" style="color:#fff"></i>
+                        </div>
+                        <div style="flex:1">
+                            <div class="product-name">{{ product.name }}</div>
+                            <div class="product-desc">{{ product.description }}</div>
+                        </div>
+                        <div style="font-size:20px; color:#9aa4bf">›</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">автомобиль</label>
-                <select class="plate-input" style="width: 100%; background: #ffffff; color: #000;" v-model="vehicleType">
-                    <option value="">Выберите тип автомобиля</option>
-                    <option value="легковой">Легковой</option>
-                    <option value="грузовой">Грузовой</option>
-                    <option value="мотоцикл">Мотоцикл</option>
-                </select>
+            <div v-if="currentScreen === 'form'">
+                <div class="form-screen">
+                    <button style="background:none;border:none;color:#67e8f9;margin-bottom:12px;cursor:pointer"
+                        @click="goBack">← Назад</button>
+                    <h2 style="margin-bottom:12px">{{ selectedProduct.name }}</h2>
+                    <form @submit.prevent="submitForm">
+                        <div style="margin-bottom:12px">
+                            <input class="form-input" v-model="formData.name" placeholder="Имя" required />
+                        </div>
+                        <div style="margin-bottom:12px">
+                            <input class="form-input" v-model="formData.phone" placeholder="Телефон" required />
+                        </div>
+                        <div style="margin-bottom:12px">
+                            <input class="form-input" v-model="formData.email" placeholder="Email" required />
+                        </div>
+                        <div v-if="selectedProduct.hasSum" style="margin-bottom:12px">
+                            <select v-model="formData.sum" required>
+                                <option value="">Выберите сумму</option>
+                                <option value="500000">500 000 ₽</option>
+                                <option value="1000000">1 000 000 ₽</option>
+                            </select>
+                        </div>
+                        <div v-if="selectedProduct.hasPeriod" style="margin-bottom:12px">
+                            <select v-model="formData.period" required>
+                                <option value="">Выберите срок</option>
+                                <option value="12">1 год</option>
+                                <option value="24">2 года</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px">
+                            <input class="form-input" v-model="formData.comment"
+                                placeholder="Комментарий (необязательно)" />
+                        </div>
+                        <button class="submit-button" type="submit">Отправить заявку</button>
+                    </form>
+                </div>
             </div>
 
-            <p style="text-align: center; margin-bottom: 20px; opacity: 0.8;">Уже были на Сравни? Продлите полис или купите ОСАГО за 2 клика.</p>
-
-            <button class="submit-btn" @click="calculateOSAGO">Рассчитать стоимость</button>
-        </div>
-
-        <div class="app-section">
-            <h2>ОСАГО всегда под рукой в приложении Сравни</h2>
-            <p>Оформляйте ОСАГО за 5 минут, следите за штрафами и многое другое.</p>
-            <div class="qr-code">
-                <i class="fas fa-qrcode"></i>
+            <div v-if="currentScreen === 'success'">
+                <div class="success-screen">
+                    <div style="font-size:56px; text-align:center">✅</div>
+                    <h3 style="text-align:center">Заявка отправлена!</h3>
+                    <p style="text-align:center; color:#9aa4bf">Спасибо — наш специалист свяжется с вами.</p>
+                    <div style="margin-top:12px">
+                        <button class="submit-button" @click="goHome">Вернуться</button>
+                    </div>
+                </div>
             </div>
-            <p>Для установки наведите камеру на QR-код</p>
-        </div>
-
-        <div class="faq">
-            <h3>Ответы на частые вопросы</h3>
-            <p>Здесь будут размещены ответы на популярные вопросы об ОСАГО.</p>
         </div>
     </div>
 
     <script>
         const { createApp } = Vue;
-
         createApp({
             data() {
                 return {
-                    plate: {
-                        letter1: '',
-                        number: '',
-                        letter2: '',
-                        region: ''
-                    },
-                    vehicleType: ''
-                };
+                    currentScreen: 'home',
+                    selectedProduct: null,
+                    formData: { name: '', phone: '', email: '', sum: '', period: '', comment: '' },
+                    products: [
+                        { id: 1, name: 'ОСАГО', icon: 'fas fa-car', url: 'osago.html', color: 'linear-gradient(135deg,#0ea5e9, #0284c7)', description: 'Обязательное страхование автогражданской ответственности', hasSum: false, hasPeriod: false },
+                        { id: 2, name: 'Каско', icon: 'fas fa-shield-alt', url: 'kasko.html', color: 'linear-gradient(135deg,#667eea,#764ba2)', description: 'Защита автомобиля от любых повреждений', hasSum: true, hasPeriod: true },
+                        { id: 3, name: 'Ипотечное страхование', icon: 'fas fa-home', url: 'ipoteka.html', color: 'linear-gradient(135deg,#fa709a,#fee140)', description: 'Страхование недвижимости по ипотеке', hasSum: true, hasPeriod: true },
+                        { id: 4, name: 'Страхование квартиры', icon: 'fas fa-building', url: 'apartment.html', color: 'linear-gradient(135deg,#43e97b,#38f9d7)', description: 'Комплексная защита вашего жилья', hasSum: true, hasPeriod: true },
+                        { id: 5, name: 'Путешествие', icon: 'fas fa-plane', url: 'travel.html', color: 'linear-gradient(135deg,#4facfe,#00f2fe)', description: 'Медицинская помощь и страховка за границей', hasSum: true, hasPeriod: false },
+                        { id: 6, name: 'Жизнь и здоровье', icon: 'fas fa-heart', url: 'health.html', color: 'linear-gradient(135deg,#f093fb,#f5576c)', description: 'Финансовая защита вас и ваших близких', hasSum: true, hasPeriod: true }
+                    ]
+                }
             },
             methods: {
-                calculateOSAGO() {
-                    const licensePlate = `${this.plate.letter1}${this.plate.number}${this.plate.letter2} ${this.plate.region} RUS`;
-                    console.log('Расчет ОСАГО для:', licensePlate, this.vehicleType);
-                    
-                    if (window.Telegram?.WebApp) {
-                        const data = {
-                            type: 'osago_calculation',
-                            licensePlate,
-                            vehicleType: this.vehicleType
-                        };
-                        window.Telegram.WebApp.sendData(JSON.stringify(data));
-                    } else {
-                        alert('Функция доступна только в Telegram');
+                selectProduct(p) { this.selectedProduct = p; this.currentScreen = 'form'; if (window.Telegram?.WebApp) window.Telegram.WebApp.HapticFeedback?.impactOccurred('light') },
+                goTo(product) {
+                    // If product has a dedicated page, navigate there; otherwise open internal form
+                    if (product && product.url) {
+                        location.href = product.url;
+                        return;
                     }
+                    this.selectProduct(product);
+                },
+                goBack() { this.currentScreen = 'home'; this.resetForm() },
+                goHome() { this.currentScreen = 'home'; this.resetForm() },
+                resetForm() { this.formData = { name: '', phone: '', email: '', sum: '', period: '', comment: '' } },
+                submitForm() {
+                    const order = { product: this.selectedProduct.name, ...this.formData, timestamp: new Date().toISOString() };
+                    if (window.Telegram?.WebApp) { window.Telegram.WebApp.sendData(JSON.stringify(order)); window.Telegram.WebApp.HapticFeedback?.notificationOccurred('success') }
+                    console.log('Заявка:', order);
+                    this.currentScreen = 'success';
                 }
             },
-            mounted() {
-                if (window.Telegram?.WebApp) {
-                    const tg = window.Telegram.WebApp;
-                    tg.ready();
-                    tg.expand();
-                    tg.setHeaderColor('secondary_bg_color');
-                }
-            }
-        }).mount('#app');
+            mounted() { if (window.Telegram?.WebApp) { const tg = window.Telegram.WebApp; tg.ready(); tg.expand(); tg.setHeaderColor('secondary_bg_color'); if (tg.initDataUnsafe?.user) { const u = tg.initDataUnsafe.user; this.formData.name = `${u.first_name || ''} ${u.last_name || ''}`.trim() } } }
+        }).mount('#app')
     </script>
 </body>
 
