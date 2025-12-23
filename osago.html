@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ОСАГО - Страховой бот</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1729;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .form-section {
+            background: #1a2332;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .license-plate {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .plate-input {
+            background: #2a3441;
+            border: 2px solid #1a2332;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            color: #ffffff;
+            width: 80px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .plate-input:focus {
+            border-color: #667eea;
+        }
+
+        .plate-region {
+            background: #2a3441;
+            border: 2px solid #1a2332;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            color: #ffffff;
+            width: 60px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .plate-region:focus {
+            border-color: #667eea;
+        }
+
+        .form-select {
+            width: 100%;
+            background: #2a3441;
+            border: 2px solid #1a2332;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 15px;
+            color: #ffffff;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-select:focus {
+            border-color: #667eea;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 20px;
+        }
+
+        .submit-button:active {
+            transform: scale(0.98);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .license-plate {
+                justify-content: space-around;
+            }
+
+            .plate-input {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <div class="header">
+            <a href="index.html" class="back-link">← На главную</a>
+            <h1>ОСАГО</h1>
+            <p>Обязательное страхование автогражданской ответственности</p>
+        </div>
+
+        <div class="form-section">
+            <form @submit.prevent="submitForm">
+                <div class="form-group">
+                    <label class="form-label">Имя</label>
+                    <input type="text" class="plate-input" style="width: 100%;" v-model="formData.name" placeholder="Введите ваше имя" required />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Телефон</label>
+                    <input type="tel" class="plate-input" style="width: 100%;" v-model="formData.phone" placeholder="+7 (___) ___-__-__" required />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="plate-input" style="width: 100%;" v-model="formData.email" placeholder="example@mail.ru" required />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Госномер автомобиля</label>
+                    <div class="license-plate">
+                        <input type="text" class="plate-input" placeholder="A" maxlength="1" v-model="plate.letter1">
+                        <input type="text" class="plate-input" placeholder="000" maxlength="3" v-model="plate.number">
+                        <input type="text" class="plate-input" placeholder="AA" maxlength="2" v-model="plate.letter2">
+                        <input type="text" class="plate-region" placeholder="00" maxlength="2" v-model="plate.region">
+                        <span style="color: white; font-weight: 600;">RUS</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Тип автомобиля</label>
+                    <select class="form-select" v-model="formData.vehicleType" required>
+                        <option value="">Выберите тип</option>
+                        <option value="легковой">Легковой</option>
+                        <option value="грузовой">Грузовой</option>
+                        <option value="мотоцикл">Мотоцикл</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Комментарий (необязательно)</label>
+                    <input type="text" class="plate-input" style="width: 100%;" v-model="formData.comment" placeholder="Дополнительная информация" />
+                </div>
+
+                <button type="submit" class="submit-button">
+                    Отправить заявку на ОСАГО
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    plate: {
+                        letter1: '',
+                        number: '',
+                        letter2: '',
+                        region: ''
+                    },
+                    formData: {
+                        name: '',
+                        phone: '',
+                        email: '',
+                        vehicleType: '',
+                        comment: ''
+                    }
+                };
+            },
+            methods: {
+                submitForm() {
+                    const licensePlate = `${this.plate.letter1}${this.plate.number}${this.plate.letter2} ${this.plate.region} RUS`;
+                    const orderData = {
+                        product: 'ОСАГО',
+                        licensePlate,
+                        ...this.formData,
+                        timestamp: new Date().toISOString()
+                    };
+
+                    if (window.Telegram?.WebApp) {
+                        window.Telegram.WebApp.sendData(JSON.stringify(orderData));
+                        window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                    }
+
+                    console.log('Заявка на ОСАГО:', orderData);
+                    alert('Заявка отправлена! Мы свяжемся с вами.');
+                }
+            },
+            mounted() {
+                if (window.Telegram?.WebApp) {
+                    const tg = window.Telegram.WebApp;
+                    tg.ready();
+                    tg.expand();
+                    tg.setHeaderColor('secondary_bg_color');
+
+                    if (tg.initDataUnsafe?.user) {
+                        const user = tg.initDataUnsafe.user;
+                        this.formData.name = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
