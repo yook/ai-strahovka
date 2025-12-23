@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страхование</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1729;
+            color: #ffffff;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Theme variables (custom) */
+
+        #app {
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+
+        /* Responsive centered page container
+           - Desktop: fixed max width and centered
+           - Mobile: full width with side paddings */
+        .page {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .header {
+            /* background: #0a0e1a; */
+            padding: 24px 20px;
+            color: white;
+            text-align: center;
+            /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); */
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header h1 i {
+            color: white;
+            font-size: 24px;
+            margin: 10px 5px 15px 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .products-section {
+            padding: 8px 20px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--tg-theme-text-color, #000);
+            margin: 20px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.7;
+        }
+
+        .product-item {
+            background: #1a2332;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .product-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            background: #202d42;
+        }
+
+        .product-item:active {
+            transform: scale(0.98);
+        }
+
+        .product-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .product-icon i {
+            color: white;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+
+        .product-desc {
+            font-size: 13px;
+            color: #999999;
+            line-height: 1.4;
+        }
+
+        .product-arrow {
+            color: #666666;
+            font-size: 20px;
+        }
+
+        .form-screen {
+            padding: 20px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            font-size: 16px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 8px 0;
+        }
+
+        .form-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #1a2332;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #1a2332;
+            color: #ffffff;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            border-color: #667eea;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .submit-button:active {
+            transform: scale(0.98);
+        }
+
+        .success-screen {
+            padding: 40px 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .success-text {
+            font-size: 15px;
+            color: #999999;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="page">
+            <!-- Главный экран -->
+            <div v-if="currentScreen === 'home'">
+                <div class="header">
+                    <h1>
+                        <i class="fas fa-car"></i>
+                        <i class="fas fa-home"></i>
+                        <i class="fas fa-plane"></i>
+                        <br>Страховой бот
+                    </h1>
+                    <p>Сравнение цен. Онлайн-оформление.</p>
+                </div>
+
+
+
+                <div class="products-section">
+                    <div v-for="product in products" :key="product.id" class="product-item"
+                        @click="selectProduct(product)">
+                        <div class="product-icon" :style="{background: product.color}">
+                            <i :class="product.icon"></i>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">{{ product.name }}</div>
+                            <div class="product-desc">{{ product.description }}</div>
+                        </div>
+                        <div class="product-arrow">›</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Экран формы -->
+            <div v-if="currentScreen === 'form'">
+                <div class="form-screen">
+                    <button class="back-button" @click="goBack">
+                        ← Назад
+                    </button>
+
+                    <div class="form-title">{{ selectedProduct.name }}</div>
+
+                    <form @submit.prevent="submitForm">
+                        <div class="form-group">
+                            <label class="form-label">Имя</label>
+                            <input type="text" class="form-input" v-model="formData.name" placeholder="Введите ваше имя"
+                                required />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Телефон</label>
+                            <input type="tel" class="form-input" v-model="formData.phone"
+                                placeholder="+7 (___) ___-__-__" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" v-model="formData.email"
+                                placeholder="example@mail.ru" required />
+                        </div>
+
+                        <div class="form-group" v-if="selectedProduct.hasSum">
+                            <label class="form-label">Страховая сумма</label>
+                            <select class="form-select" v-model="formData.sum" required>
+                                <option value="">Выберите сумму</option>
+                                <option value="500000">500 000 ₽</option>
+                                <option value="1000000">1 000 000 ₽</option>
+                                <option value="2000000">2 000 000 ₽</option>
+                                <option value="5000000">5 000 000 ₽</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" v-if="selectedProduct.hasPeriod">
+                            <label class="form-label">Срок страхования</label>
+                            <select class="form-select" v-model="formData.period" required>
+                                <option value="">Выберите срок</option>
+                                <option value="6">6 месяцев</option>
+                                <option value="12">1 год</option>
+                                <option value="24">2 года</option>
+                                <option value="36">3 года</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Комментарий (необязательно)</label>
+                            <input type="text" class="form-input" v-model="formData.comment"
+                                placeholder="Дополнительная информация" />
+                        </div>
+
+                        <button type="submit" class="submit-button">
+                            Отправить заявку
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Экран успеха -->
+            <div v-if="currentScreen === 'success'">
+                <div class="success-screen">
+                    <div class="success-icon">✅</div>
+                    <div class="success-title">Заявка отправлена!</div>
+                    <div class="success-text">
+                        Спасибо за обращение! Наш специалист свяжется с вами в ближайшее время для уточнения
+                        деталей.
+                    </div>
+                    <button class="submit-button" @click="goHome">Вернуться на главную</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    currentScreen: 'home',
+                    selectedProduct: null,
+                    formData: {
+                        name: '',
+                        phone: '',
+                        email: '',
+                        sum: '',
+                        period: '',
+                        comment: ''
+                    },
+                    products: [
+                        {
+                            id: 1,
+                            name: 'ОСАГО',
+                            icon: 'fas fa-car',
+                            color: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
+                            description: 'Обязательное страхование автогражданской ответственности',
+                            hasSum: false,
+                            hasPeriod: false
+                        },
+                        {
+                            id: 2,
+                            name: 'Каско',
+                            icon: 'fas fa-shield-alt',
+                            color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            description: 'Защита автомобиля от любых повреждений',
+                            hasSum: true,
+                            hasPeriod: true
+                        },
+                        {
+                            id: 3,
+                            name: 'Ипотечное страхование',
+                            icon: 'fas fa-home',
+                            color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                            description: 'Страхование недвижимости по ипотеке',
+                            hasSum: true,
+                            hasPeriod: true
+                        },
+                        {
+                            id: 4,
+                            name: 'Страхование квартиры',
+                            icon: 'fas fa-building',
+                            color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                            description: 'Комплексная защита вашего жилья',
+                            hasSum: true,
+                            hasPeriod: true
+                        },
+                        {
+                            id: 5,
+                            name: 'Путешествие',
+                            icon: 'fas fa-plane',
+                            color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                            description: 'Медицинская помощь и страховка за границей',
+                            hasSum: true,
+                            hasPeriod: false
+                        },
+                        {
+                            id: 6,
+                            name: 'Жизнь и здоровье',
+                            icon: 'fas fa-heart',
+                            color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                            description: 'Финансовая защита вас и ваших близких',
+                            hasSum: true,
+                            hasPeriod: true
+                        },
+                        {
+                            id: 7,
+                            name: 'Кредитное страхование жизни',
+                            icon: 'fas fa-file-contract',
+                            color: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+                            description: 'Защита от рисков при получении кредита',
+                            hasSum: true,
+                            hasPeriod: true
+                        }
+                    ]
+                };
+            },
+            methods: {
+                selectProduct(product) {
+                    this.selectedProduct = product;
+                    this.currentScreen = 'form';
+
+                    // Telegram Web App haptic feedback
+                    if (window.Telegram?.WebApp) {
+                        window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+                    }
+                },
+                goBack() {
+                    this.currentScreen = 'home';
+                    this.resetForm();
+                },
+                goHome() {
+                    this.currentScreen = 'home';
+                    this.resetForm();
+                },
+                resetForm() {
+                    this.formData = {
+                        name: '',
+                        phone: '',
+                        email: '',
+                        sum: '',
+                        period: '',
+                        comment: ''
+                    };
+                },
+                submitForm() {
+                    // Подготовка данных для отправки
+                    const orderData = {
+                        product: this.selectedProduct.name,
+                        ...this.formData,
+                        timestamp: new Date().toISOString()
+                    };
+
+                    // Отправка данных через Telegram Web App
+                    if (window.Telegram?.WebApp) {
+                        window.Telegram.WebApp.sendData(JSON.stringify(orderData));
+                        window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                    }
+
+                    // Вывод в консоль для демонстрации
+                    console.log('Заявка отправлена:', orderData);
+
+                    // Показываем экран успеха
+                    this.currentScreen = 'success';
+                }
+            },
+            mounted() {
+                // Инициализация Telegram Web App
+                if (window.Telegram?.WebApp) {
+                    const tg = window.Telegram.WebApp;
+                    tg.ready();
+                    tg.expand();
+
+                    // Настройка цветов из темы Telegram
+                    tg.setHeaderColor('secondary_bg_color');
+
+                    // Заполняем имя из Telegram, если доступно
+                    if (tg.initDataUnsafe?.user) {
+                        const user = tg.initDataUnsafe.user;
+                        this.formData.name = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
